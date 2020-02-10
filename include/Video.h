@@ -18,7 +18,7 @@ class Video {
 public:
     Video(int width=640,int height=480){
         mFbo = gl::Fbo::create(app::getWindowWidth(),app::getWindowHeight());
-        
+        videoLoaded = false;
     }
     
     
@@ -28,6 +28,7 @@ public:
             mMovie = qtime::MovieGl::create( moviePath );
           
             mMovie->play();
+     
             console() << "Playing: " << mMovie->isPlaying() << std::endl;
         }
         catch( ci::Exception &exc ) {
@@ -38,10 +39,13 @@ public:
         mFrameTexture.reset();
     }
 
+    bool isVideoLoaded() { return videoLoaded; }
+    bool isPlaying(){ return mMovie->isPlaying();}
     
     void update(){
         if( mMovie ){
             mFrameTexture = mMovie->getTexture();
+           
         }
         
         draw();
@@ -52,25 +56,26 @@ public:
     }
     
     ci::Surface8u getSurface(){
-    
         return mFbo->readPixels8u(centeredRect.getInteriorArea());
     }
     
-    ci::Rectf getCenteredRect(){
-        return centeredRect;
-    }
+    Rectf getCenteredRect(){ return centeredRect; }
     
+    // renders video into FBO.
     void draw(){
 
         gl::ScopedFramebuffer fbo(mFbo);
         if(mMovie && mMovie->isPlaying()){
             if( mFrameTexture ) {
-                    centeredRect = Rectf( mFrameTexture->getBounds() ).getCenteredFit( getWindowBounds(), true );
-                    gl::draw( mFrameTexture, centeredRect );
-                }
+                centeredRect = Rectf( mFrameTexture->getBounds() ).getCenteredFit( getWindowBounds(), true );
+                gl::draw( mFrameTexture, centeredRect );
+                videoLoaded = true;
+                
+            }
         }
     }
 protected:
+    bool videoLoaded;
     Rectf centeredRect;
     gl::TextureRef  mFrameTexture;
     qtime::MovieGlRef mMovie;
