@@ -8,10 +8,17 @@
 #include "cinder/Json.h"
 #include "CinderOpenCv.h"
 #include "cinder/Thread.h"
+#include "cinder/Json.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
+struct EyeFrame {
+  
+    int frameNumber;
+    ci::vec2 eye1,eye2;
+};
 
 class FaceTrackTestApp : public App {
   public:
@@ -31,14 +38,29 @@ class FaceTrackTestApp : public App {
     
     std::thread mThread;
     bool threadStarted;
-    cv::CascadeClassifier    mFaceCascade, mEyeCascade;
-    vector<Rectf>            mEyes,mFaces;
-    Video vid;
-    gl::TextureRef testTexture;
     
-    ci::gl::VboMeshRef mMesh;
-    ci::gl::GlslProgRef mShader;
-    ci::gl::BatchRef mBatch;
+    // will write out eye positions each frame.
+    JsonTree doc;
+    
+    //classifiers for faces and eyes
+    cv::CascadeClassifier    mFaceCascade, mEyeCascade;
+    
+    //! Holds eye information.
+    vector<Rectf> mEyes;
+    //vector<Rectf> mFaces;
+    
+    vector<EyeFrame> frames;
+    
+    int frameCount = 0;
+    
+    bool jsonWritten;
+    
+    //! Manages vide playback.
+    Video vid;
+    
+    //! texture to render output to for reference.
+    gl::TextureRef renderTexture;
+    
 };
 
 FaceTrackTestApp::~FaceTrackTestApp(){
@@ -51,11 +73,13 @@ void FaceTrackTestApp::setup()
     mFaceCascade.load( getAssetPath( "haarcascade_frontalface_alt.xml" ).string() );
     mEyeCascade.load( getAssetPath( "haarcascade_eye.xml" ).string() );
     
-    mMesh = gl::VboMesh::create(geom::Rect());
-    mShader = gl::getStockShader(gl::ShaderDef().color());
-    mBatch = gl::Batch::create(mMesh,mShader);
 
     threadStarted = false;
+    jsonWritten = false;
+    
+    vid.setOnComplete([=]()->void {
+       
+    });
 }
 
 
@@ -69,6 +93,7 @@ void FaceTrackTestApp::update()
     
     vid.update();
    
+    
 }
 
 void FaceTrackTestApp::draw()
@@ -78,8 +103,10 @@ void FaceTrackTestApp::draw()
     gl::setMatricesWindow(app::getWindowSize());
     
 
+    frameCount += 1;
+    
     if(vid.isVideoLoaded() && vid.isPlaying()){
-        testTexture = gl::Texture::create(vid.getSurface());
+        renderTexture = gl::Texture::create(vid.getSurface());
         updateFaces(vid.getSurface());
         
         if(!threadStarted){
@@ -87,7 +114,7 @@ void FaceTrackTestApp::draw()
             threadStarted = true;
         }
         
-        gl::draw(testTexture);
+        gl::draw(renderTexture);
         for( vector<Rectf>::const_iterator eyeIter = mEyes.begin(); eyeIter != mEyes.end(); ++eyeIter ){
             gl::drawSolidCircle( eyeIter->getCenter(), eyeIter->getWidth() / 2 );
         }
@@ -132,7 +159,10 @@ void FaceTrackTestApp::updateFaces(const Surface cameraImage){
            for( vector<cv::Rect>::const_iterator eyeIter = eyes.begin(); eyeIter != eyes.end(); ++eyeIter ) {
                Rectf eyeRect( fromOcv( *eyeIter ) );
                eyeRect = eyeRect * calcScale + faceRect.getUpperLeft();
-               mEyes.push_back( eyeRect );
+               
+               if(eyes.size() == 2){
+                   mEyes.push_back( eyeRect );
+               }
            }
        }
 }

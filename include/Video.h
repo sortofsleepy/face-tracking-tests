@@ -59,6 +59,10 @@ public:
         return mFbo->readPixels8u(centeredRect.getInteriorArea());
     }
     
+    void setOnComplete(std::function<void()> cb){
+        onComplete = cb;
+    }
+    
     Rectf getCenteredRect(){ return centeredRect; }
     
     // renders video into FBO.
@@ -73,8 +77,18 @@ public:
                 
             }
         }
+        
+        if(mMovie && mMovie->isDone()){
+            if(onComplete != nullptr){
+                onComplete();
+            }
+        }
     }
 protected:
+    
+    //! lambda to run when the video is finished
+    std::function<void()> onComplete;
+    
     bool videoLoaded;
     Rectf centeredRect;
     gl::TextureRef  mFrameTexture;
