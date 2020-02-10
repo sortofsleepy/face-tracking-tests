@@ -16,6 +16,7 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
+		082A0DA223F2135C00108CC2 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 082A0DA123F2135C00108CC2 /* readme.md */; };
 		48226E1FFA0148A3A69FAA0F /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1B7566DE069D45D6ABCAEC8D /* CinderApp.icns */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		8B345DEB07EC4B6894BBC2B4 /* FaceTrackerTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F89BD7AAB87448E882214973 /* FaceTrackerTestApp.cpp */; };
@@ -33,6 +34,7 @@
 		00B995581B128DF400A5C623 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		00B995591B128DF400A5C623 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		082A0DA023ECDEBD00108CC2 /* Video.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../include/Video.h; sourceTree = "<group>"; };
+		082A0DA123F2135C00108CC2 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../readme.md; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1B7566DE069D45D6ABCAEC8D /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -123,6 +125,7 @@
 		29B97314FDCFA39411CA2CEA /* FaceTrackerTest */ = {
 			isa = PBXGroup;
 			children = (
+				082A0DA123F2135C00108CC2 /* readme.md */,
 				01B97315FEAEA392516A2CEA /* Blocks */,
 				29B97315FDCFA39411CA2CEA /* Headers */,
 				080E96DDFE201D6D7F000001 /* Source */,
@@ -229,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				082A0DA223F2135C00108CC2 /* readme.md in Resources */,
 				48226E1FFA0148A3A69FAA0F /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
